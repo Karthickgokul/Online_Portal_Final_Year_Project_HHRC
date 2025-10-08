@@ -19,7 +19,7 @@ project_folder/
 ├── README.md
 └── requirements.txt
 
-
+---
 
 ## Setup
 
