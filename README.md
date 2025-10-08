@@ -28,8 +28,9 @@ Copy code
 
 **1. Clone the repository**  
 ```bash
-git clone https://github.com/yourusername/repo-name.git
-cd repo-name
+git clone https://github.com/Karthickgokul/Online_Portal_Final_Year_Project_HHRC.git
+cd Online_Portal_Final_Year_Project_HHRC
+
 2. Create virtual environment (optional but recommended)
 
 bash
@@ -37,6 +38,7 @@ Copy code
 python -m venv venv
 venv\Scripts\activate      # Windows
 # source venv/bin/activate  # Linux/Mac
+
 3. Install dependencies
 
 bash
