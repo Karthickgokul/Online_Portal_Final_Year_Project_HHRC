@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>View Attendance - Rajah's College</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+<style>
+    body {
+        background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #fff;
+        min-height: 100vh;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #00e0ff;
+        text-shadow: 0 0 10px #00e0ff, 0 0 20px #00e0ff;
+        letter-spacing: 1px;
+        font-weight: 600;
+    }
+
+    a.btn {
+        text-decoration: none;
+    }
+
+    /* Filter Form - Improved visibility: white labels on dark, black text in inputs */
+    .form-label {
+        color: #fff;
+        font-weight: 500;
+        text-shadow: 0 0 5px rgba(0, 224, 255, 0.5);
+    }
+    .form-control, select {
+        color: #000;
+        background-color: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(0, 224, 255, 0.3);
+        box-shadow: inset 0 0 5px rgba(0, 224, 255, 0.1);
+    }
+    .form-control:focus, select:focus {
+        color: #000;
+        background-color: #fff;
+        border-color: #00e0ff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 224, 255, 0.25), inset 0 0 10px rgba(0, 224, 255, 0.2);
+    }
+    .form-control::placeholder {
+        color: #666;
+    }
+
+    .btn-success {
+        background: linear-gradient(90deg, #00e0ff, #0077ff);
+        border: none;
+        box-shadow: 0 4px 15px rgba(0,224,255,0.3);
+        color: #000;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+    .btn-success:hover {
+        background: linear-gradient(90deg, #00ffa3, #00e0ff);
+        color: #000;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,255,255,0.5), 0 0 15px rgba(0, 224, 255, 0.4);
+    }
+    .btn-secondary {
+        background: rgba(108, 117, 125, 0.8);
+        border: 1px solid rgba(0, 224, 255, 0.3);
+        color: #fff;
+        transition: all 0.3s ease;
+    }
+    .btn-secondary:hover { 
+        background: rgba(90, 98, 104, 0.9);
+        color: #fff;
+        box-shadow: 0 4px 15px rgba(0,224,255,0.2);
+    }
+    .btn-dark {
+        background: rgba(52, 58, 64, 0.8);
+        border: 1px solid rgba(0, 224, 255, 0.3);
+        color: #fff;
+        transition: all 0.3s ease;
+    }
+    .btn-dark:hover {
+        background: rgba(33, 37, 41, 0.9);
+        color: #fff;
+        box-shadow: 0 4px 15px rgba(0,224,255,0.2);
+    }
+    .btn-primary {
+        background: linear-gradient(90deg, #007bff, #00e0ff);
+        border: none;
+        color: #000;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+        transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+        background: linear-gradient(90deg, #00e0ff, #007bff);
+        color: #000;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,224,255,0.5);
+    }
+
+    /* Subject header */
+    .subject-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 30px;
+        margin-bottom: 15px;
+        padding-bottom: 5px;
+        border-bottom: 2px solid rgba(0, 224, 255, 0.5);
+        box-shadow: 0 2px 10px rgba(0, 224, 255, 0.2);
+    }
+    .subject-header h4 {
+        color: #00e0ff;
+        text-shadow: 0 0 10px #00e0ff, 0 0 20px #00e0ff;
+        margin: 0;
+        font-weight: 600;
+    }
+    .btn-warning {
+        background: linear-gradient(90deg, #ffb347, #ffcc33);
+        color: #000;
+        font-weight: 600;
+        border: none;
+        box-shadow: 0 4px 15px rgba(255, 179, 71,0.4);
+        transition: all 0.3s ease;
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+    .btn-warning:hover {
+        background: linear-gradient(90deg, #ffd97d, #ffecb3);
+        box-shadow: 0 6px 20px rgba(255, 204, 51,0.5), 0 0 15px rgba(255, 179, 71, 0.4);
+        transform: translateY(-2px);
+    }
+
+    /* Table - Enhanced neon style: glow borders, subtle alternates, better contrast */
+    .table {
+        backdrop-filter: blur(10px);
+        background: rgba(0,0,0,0.5);
+        border-radius: 10px;
+        color: #fff;
+        border: 1px solid rgba(0, 224, 255, 0.4);
+        box-shadow: 0 0 20px rgba(0, 224, 255, 0.1);
+        overflow: hidden;
+    }
+    .table th {
+        background: linear-gradient(90deg, rgba(0,224,255,0.4), rgba(0,119,255,0.4));
+        color: #fff;
+        text-shadow: 0 0 5px #00e0ff;
+        border-bottom: 2px solid rgba(0, 224, 255, 0.6);
+        font-weight: 600;
+        padding: 12px 8px;
+    }
+    .table td {
+        vertical-align: middle;
+        text-align: center;
+        border-bottom: 1px solid rgba(0, 224, 255, 0.2);
+        padding: 10px 8px;
+        text-shadow: 0 0 3px rgba(255, 255, 255, 0.5);
+    }
+    .table tbody tr:nth-child(even) {
+        background: rgba(0, 224, 255, 0.05);
+    }
+    .table tbody tr:hover {
+        background: rgba(0, 224, 255, 0.1);
+        box-shadow: inset 0 0 10px rgba(0, 224, 255, 0.2);
+        transform: scale(1.01);
+        transition: all 0.2s ease;
+    }
+    .badge-success {
+        background: linear-gradient(90deg, #00e0ff, #00ffa3);
+        text-shadow: 0 0 5px #00e0ff;
+        color: #000;
+        font-weight: 600;
+        box-shadow: 0 0 10px rgba(0, 224, 255, 0.5);
+        padding: 0.5em 0.75em;
+    }
+    .badge-danger {
+        background: linear-gradient(90deg, #ff4b2b, #ff6b35);
+        text-shadow: 0 0 5px #ff4b2b;
+        color: #fff;
+        font-weight: 600;
+        box-shadow: 0 0 10px rgba(255, 75, 43, 0.5);
+        padding: 0.5em 0.75em;
+    }
+
+    /* No records message */
+    .text-muted {
+        color: rgba(255, 255, 255, 0.7) !important;
+        text-shadow: 0 0 3px rgba(0, 224, 255, 0.3);
+        font-style: italic;
+    }
+
+    /* Toast - Enhanced neon */
+    .toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+    }
+    .toast {
+        background: rgba(0,0,0,0.9);
+        color: #fff;
+        border-left: 5px solid #00e0ff;
+        backdrop-filter: blur(15px);
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0,224,255,0.3);
+        border: 1px solid rgba(0, 224, 255, 0.2);
+    }
+    .toast-header {
+        background: rgba(0,224,255,0.3);
+        color: #fff;
+        border-radius: 10px 10px 0 0;
+        border-bottom: 1px solid rgba(0, 224, 255, 0.4);
+    }
+    .toast-body {
+        text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Container padding for better mobile */
+    .container {
+        padding: 20px;
+    }
+
+    @media(max-width: 768px){
+        .subject-header { 
+            flex-direction: column; 
+            gap: 10px; 
+            text-align: center;
+        }
+        .table-responsive {
+            font-size: 0.9rem;
+        }
+        .btn {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+        .row.g-3 .col-md-3.align-self-end {
+            margin-top: 10px;
+        }
+    }
+
+    @media(max-width: 576px){
+        h2 {
+            font-size: 1.5rem;
+        }
+        .table th, .table td {
+            padding: 8px 4px;
+            font-size: 0.85rem;
+        }
+    }
+</style>
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Attendance Records</h2>
+
+    <a href="/teacher/dashboard" class="btn btn-dark mb-3"><i class="bi bi-arrow-left"></i> Back to Dashboard</a>
+
+    <!-- Filter Form -->
+    <form method="GET" action="/teacher/view_attendance" class="row g-3 mb-4">
+        <div class="col-md-3">
+            <label for="start_date" class="form-label">Start Date:</label>
+            <input type="date" id="start_date" name="start_date" class="form-control"
+                   value="{{ request.args.get('start_date', '') }}">
+        </div>
+        <div class="col-md-3">
+            <label for="end_date" class="form-label">End Date:</label>
+            <input type="date" id="end_date" name="end_date" class="form-control"
+                   value="{{ request.args.get('end_date', '') }}">
+        </div>
+        <div class="col-md-3 align-self-end">
+            <button type="submit" class="btn btn-success"><i class="bi bi-funnel"></i> Filter</button>
+            <a href="/teacher/view_attendance?show_all=true" class="btn btn-secondary ms-2"><i class="bi bi-eye"></i> Show All</a>
+        </div>
+    </form>
+
+    {% for subject, records in attendance_data.items() %}
+        <div class="subject-header">
+            <h4>{{ subject }}</h4>
+            <a href="/teacher/edit_attendance/{{ subject }}" class="btn btn-warning" style="margin-top: 10px; margin-right: 5px;"><i class="bi bi-pencil"></i> Edit Attendance</a>
+        </div>
+
+        {% if records %}
+        <div class="table-responsive mb-3">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Student Name</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rec in records %}
+                    <tr>
+                        <td>{{ rec.date }}</td>
+                        <td>{{ rec.student_name }}</td>
+                        <td>
+                            {% if rec.status == 'Present' %}
+                                <span class="badge badge-success">{{ rec.status }}</span>
+                            {% else %}
+                                <span class="badge badge-danger">{{ rec.status }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <a href="/teacher/download_attendance/{{ subject }}?start_date={{ request.args.get('start_date', '') }}&end_date={{ request.args.get('end_date', '') }}&show_all={{ request.args.get('show_all', '') }}"
+           class="btn btn-primary mb-4"><i class="bi bi-download"></i> Download CSV for {{ subject }}</a>
+        {% else %}
+        <p class="text-muted text-center mb-4">No attendance records found for this date range.</p>
+        {% endif %}
+    {% endfor %}
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+        <div class="toast align-items-center text-bg-{{ 'success' if category=='success' else 'warning' if category=='warning' else 'danger' }} border-0 mb-2" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    {{ message }}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Activate all Bootstrap Toasts
+    const toastElList = [].slice.call(document.querySelectorAll('.toast'))
+    toastElList.forEach(function (toastEl) {
+        new bootstrap.Toast(toastEl, { delay: 4000 }).show();
+    });
+</script>
+</body>
+</html>

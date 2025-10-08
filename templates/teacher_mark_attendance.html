@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mark Attendance | Teacher Panel</title>
+  <style>
+    /* ==== CSS Variables for Maintainability ==== */
+    :root {
+      --primary-color: #00e0ff;
+      --secondary-color: #00ffa3;
+      --accent-present: #00ffa3;
+      --accent-absent: #ff6b6b;
+      --bg-gradient: linear-gradient(135deg, #0a0f1f 0%, #101a3c 100%);
+      --glass-bg: rgba(255, 255, 255, 0.07);
+      --glass-border: rgba(0, 224, 255, 0.2);
+      --shadow-glow: 0 0 30px rgba(0, 255, 200, 0.15);
+      --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.2);
+      --text-primary: #fff;
+      --text-secondary: #00ffa3;
+      --text-muted: rgba(255, 255, 255, 0.7);
+      --table-hover: rgba(0, 255, 163, 0.08);
+      --input-bg: rgba(255, 255, 255, 0.1);
+      --input-border: rgba(0, 224, 255, 0.4);
+      --button-gradient: linear-gradient(90deg, #00ffa3, #00e0ff);
+      --font-family: "Poppins", sans-serif;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --border-radius: 8px;
+      --spacing-sm: 0.5rem;
+      --spacing-md: 1rem;
+      --spacing-lg: 1.5rem;
+    }
+
+    /* ==== Global Layout ==== */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background: var(--bg-gradient);
+      color: var(--text-primary);
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ==== Glass Container ==== */
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: var(--spacing-lg) auto;
+      background: var(--glass-bg);
+      border-radius: var(--border-radius);
+      padding: var(--spacing-lg);
+      backdrop-filter: blur(15px);
+      box-shadow: var(--shadow-glow);
+      border: 1px solid var(--glass-border);
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    /* ==== Heading ==== */
+    h1 {
+      text-align: center;
+      font-size: 2.2rem;
+      margin-bottom: var(--spacing-md);
+      color: var(--primary-color);
+      text-shadow: 0 0 10px rgba(0, 224, 255, 0.3);
+      letter-spacing: 0.5px;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 1.8rem;
+      margin: var(--spacing-lg) 0 var(--spacing-md);
+      color: var(--primary-color);
+      font-weight: 500;
+    }
+
+    /* ==== Back Button ==== */
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      margin-bottom: var(--spacing-md);
+      color: var(--secondary-color);
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+      padding: var(--spacing-sm) var(--spacing-md);
+      border-radius: var(--border-radius);
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+    }
+
+    .back-btn:hover,
+    .back-btn:focus {
+      color: var(--primary-color);
+      text-shadow: 0 0 8px var(--secondary-color);
+      transform: translateX(-2px);
+      box-shadow: 0 0 10px var(--primary-color);
+      outline: none;
+    }
+
+    /* ==== Form Styling ==== */
+    .form-section {
+      margin-top: var(--spacing-lg);
+      text-align: center;
+      background: var(--glass-bg);
+      border-radius: var(--border-radius);
+      padding: var(--spacing-md);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--shadow-subtle);
+    }
+
+    .form-row {
+      display: flex;
+      justify-content: center;
+      gap: var(--spacing-md);
+      flex-wrap: wrap;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      min-width: 220px;
+      flex: 1;
+    }
+
+    label {
+      font-weight: 600;
+      color: var(--secondary-color);
+      margin-bottom: var(--spacing-sm);
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    select,
+    input[type="date"] {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: var(--border-radius);
+      padding: 0.75rem 1rem;
+      color: var(--text-primary);
+      font-size: 1rem;
+      outline: none;
+      transition: var(--transition);
+      font-family: inherit;
+    }
+
+    select:hover,
+    select:focus,
+    input[type="date"]:hover,
+    input[type="date"]:focus {
+      box-shadow: 0 0 8px var(--primary-color);
+      border-color: var(--primary-color);
+      outline: none;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    select option {
+      background: #101a3c;
+      color: var(--text-primary);
+      padding: 0.5rem;
+    }
+
+    /* ==== Table Styling ==== */
+    .students-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: var(--spacing-lg) 0;
+      box-shadow: var(--shadow-subtle);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+    }
+
+    .students-table th,
+    .students-table td {
+      padding: var(--spacing-md);
+      text-align: left;
+      font-size: 0.95rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .students-table th {
+      background: rgba(0, 224, 255, 0.15);
+      color: var(--text-primary);
+      font-weight: 600;
+      text-align: center;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      color: var(--secondary-color);
+    }
+
+    .students-table td {
+      vertical-align: middle;
+      color: var(--text-primary);
+    }
+
+    .students-table tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .students-table tr:hover {
+      background: var(--table-hover);
+      transition: var(--transition);
+    }
+
+    /* ==== Enhanced Status Options (Elegant Toggle Buttons) ==== */
+    .status-group {
+      display: flex;
+      justify-content: center;
+      gap: var(--spacing-sm);
+      flex-wrap: wrap;
+    }
+
+    .status-fieldset {
+      border: none;
+      margin: 0;
+      padding: 0;
+      display: contents; /* Allows flex children to participate in flex layout */
+    }
+
+    .status-option {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-sm);
+      font-weight: 500;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: var(--transition);
+      padding: 0.5rem 1rem;
+      border-radius: var(--border-radius);
+      background: var(--input-bg);
+      border: 2px solid var(--input-border);
+      min-width: 90px;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .status-option:hover {
+      background: rgba(0, 224, 255, 0.1);
+      border-color: var(--primary-color);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 224, 255, 0.2);
+    }
+
+    .status-option input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .status-option input[type="radio"]:checked + span {
+      background: var(--accent-present);
+      color: #000;
+      box-shadow: 0 0 0 2px var(--accent-present);
+      transform: scale(1.02);
+    }
+
+    .status-option input[type="radio"]:checked + span::after {
+      content: "✓";
+      position: absolute;
+      right: 0.5rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-weight: bold;
+      font-size: 0.8rem;
+    }
+
+    /* Specific styles for Present/Absent */
+    .status-present {
+      border-color: var(--accent-present);
+      color: var(--accent-present);
+    }
+
+    .status-present:hover {
+      border-color: var(--accent-present);
+      background: rgba(0, 255, 163, 0.1);
+    }
+
+    .status-present input[type="radio"]:checked + span {
+      background: var(--accent-present);
+      color: #000;
+    }
+
+    .status-absent {
+      border-color: var(--accent-absent);
+      color: var(--accent-absent);
+    }
+
+    .status-absent:hover {
+      border-color: var(--accent-absent);
+      background: rgba(255, 107, 107, 0.1);
+    }
+
+    .status-absent input[type="radio"]:checked + span {
+      background: var(--accent-absent);
+      color: #000;
+    }
+
+    .status-option span {
+      position: relative;
+      z-index: 1;
+      transition: var(--transition);
+      border-radius: calc(var(--border-radius) - 2px);
+      padding: 0.25rem 0.5rem;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* ==== Submit Button ==== */
+    .submit-btn {
+      display: block;
+      margin: var(--spacing-lg) auto 0;
+      background: var(--button-gradient);
+      color: #000;
+      border: none;
+      padding: 1rem 2rem;
+      font-weight: 700;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: var(--transition);
+      letter-spacing: 0.5px;
+      font-size: 1.1rem;
+      min-width: 180px;
+      font-family: inherit;
+      text-transform: uppercase;
+    }
+    
+    .submit-btn:hover,
+    .submit-btn:focus {
+      background: linear-gradient(90deg, #00e0ff, #00ffa3);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 224, 255, 0.3);
+      outline: none;
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
+    /* ==== Animation ==== */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ==== Responsive Design ==== */
+    @media (max-width: 768px) {
+      .container {
+        width: 95%;
+        padding: var(--spacing-md);
+        margin: var(--spacing-md) auto;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      .form-row {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .form-group {
+        min-width: 100%;
+        max-width: 300px;
+      }
+
+      .students-table {
+        font-size: 0.9rem;
+        overflow-x: auto;
+        display: block;
+        white-space: nowrap;
+      }
+
+      .students-table thead,
+      .students-table tbody,
+      .students-table tr,
+      .students-table th,
+      .students-table td {
+        display: block;
+      }
+
+      .students-table thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+      }
+
+      .students-table tr {
+        border: 1px solid var(--glass-border);
+        margin-bottom: var(--spacing-sm);
+        border-radius: var(--border-radius);
+        padding: var(--spacing-md);
+        background: var(--glass-bg);
+        display: block;
+      }
+
+      .students-table td {
+        border: none;
+        position: relative;
+        padding-left: 50%;
+        text-align: right;
+        padding: var(--spacing-sm) 0;
+        display: block;
+      }
+
+      .students-table td:before {
+        content: attr(data-label) ": ";
+        position: absolute;
+        left: 6px;
+        width: 45%;
+        font-weight: 600;
+        color: var(--secondary-color);
+        text-align: left;
+        white-space: nowrap;
+        padding-right: var(--spacing-sm);
+      }
+
+      .status-group {
+        justify-content: flex-start;
+        gap: var(--spacing-sm);
+        margin-top: var(--spacing-sm);
+      }
+
+      .status-option {
+        min-width: 80px;
+        padding: 0.4rem 0.75rem;
+        font-size: 0.85rem;
+      }
+
+      .submit-btn {
+        width: 100%;
+        font-size: 1rem;
+        max-width: 300px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: var(--spacing-sm);
+      }
+
+      .status-group {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.25rem;
+      }
+
+      .status-option {
+        justify-content: flex-start;
+        min-width: auto;
+      }
+
+      .status-option input[type="radio"]:checked + span::after {
+        right: auto;
+        left: 0.5rem;
+      }
+
+      .form-group {
+        max-width: 100%;
+      }
+    }
+
+    /* ==== Accessibility Enhancements ==== */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--primary-color);
+      outline-offset: 2px;
+    }
+
+    /* Hide legend visually but keep for screen readers */
+    .status-fieldset legend {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <a href="/teacher/dashboard" class="back-btn" aria-label="Back to Dashboard">
+      ← Back to Dashboard
+    </a>
+    <h1>Mark Attendance</h1>
+
+    <form method="POST" validate>
+      <div class="form-section">
+        <h2>Attendance Details</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="subject_id">Select Subject</label>
+            <select id="subject_id" name="subject_id" required aria-required="true">
+              <option value="">-- Select Subject --</option>
+              {% for sub in subjects %}
+                <option value="{{ sub.id }}">{{ sub.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="date">Select Date</label>
+            <input type="date" id="date" name="date" required aria-required="true" value="{{ today }}" min="{{ today }}">
+          </div>
+        </div>
+      </div>
+
+      <table class="students-table" role="grid" aria-label="Students Attendance">
+        <thead>
+          <tr>
+            <th scope="col" role="columnheader">Student ID</th>
+            <th scope="col" role="columnheader">Student Name</th>
+            <th scope="col" role="columnheader">Attendance Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in students %}
+          <tr role="row">
+            <td data-label="Student ID" role="cell">{{ s.id }}</td>
+            <td data-label="Student Name" role="cell">{{ s.name }}</td>
+            <td data-label="Status" role="cell">
+              <fieldset class="status-fieldset status-group">
+                <legend>Status for {{ s.name }}</legend>
+                <label class="status-option status-present">
+                  <input type="radio" name="status_{{ s.id }}" value="Present" required aria-required="true">
+                  <span>Present</span>
+                </label>
+                <label class="status-option status-absent">
+                  <input type="radio" name="status_{{ s.id }}" value="Absent">
+                  <span>Absent</span>
+                </label>
+              </fieldset>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <button type="submit" class="submit-btn" aria-label="Save Attendance Records">
+        Save Attendance
+      </button>
+    </form>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Assignment - Rajah's College</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #00e0ff;
+            text-shadow: 0 0 10px #00e0ff, 0 0 20px #00e0ff;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        a.btn {
+            text-decoration: none;
+        }
+
+        /* Filter Form - Improved visibility: white labels on dark, black text in inputs */
+        .form-label {
+            color: #fff;
+            font-weight: 500;
+            text-shadow: 0 0 5px rgba(0, 224, 255, 0.5);
+        }
+        .form-control, select, textarea {
+            color: #000;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 224, 255, 0.3);
+            box-shadow: inset 0 0 5px rgba(0, 224, 255, 0.1);
+        }
+        .form-control:focus, select:focus, textarea:focus {
+            color: #000;
+            background-color: #fff;
+            border-color: #00e0ff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 224, 255, 0.25), inset 0 0 10px rgba(0, 224, 255, 0.2);
+        }
+        .form-control::placeholder {
+            color: #666;
+        }
+        .form-select option {
+            background-color: #fff;
+            color: #000;
+        }
+
+        .btn-success {
+            background: linear-gradient(90deg, #00e0ff, #0077ff);
+            border: none;
+            box-shadow: 0 4px 15px rgba(0,224,255,0.3);
+            color: #000;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+        .btn-success:hover {
+            background: linear-gradient(90deg, #00ffa3, #00e0ff);
+            color: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,255,255,0.5), 0 0 15px rgba(0, 224, 255, 0.4);
+        }
+        .btn-secondary {
+            background: rgba(108, 117, 125, 0.8);
+            border: 1px solid rgba(0, 224, 255, 0.3);
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover { 
+            background: rgba(90, 98, 104, 0.9);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(0,224,255,0.2);
+        }
+        .btn-dark {
+            background: rgba(52, 58, 64, 0.8);
+            border: 1px solid rgba(0, 224, 255, 0.3);
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+        .btn-dark:hover {
+            background: rgba(33, 37, 41, 0.9);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(0,224,255,0.2);
+        }
+        .btn-primary {
+            background: linear-gradient(90deg, #007bff, #00e0ff);
+            border: none;
+            color: #000;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #00e0ff, #007bff);
+            color: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,224,255,0.5);
+        }
+        .btn-warning {
+            background: linear-gradient(90deg, #ffb347, #ffcc33);
+            color: #000;
+            font-weight: 600;
+            border: none;
+            box-shadow: 0 4px 15px rgba(255, 179, 71,0.4);
+            transition: all 0.3s ease;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+        .btn-warning:hover {
+            background: linear-gradient(90deg, #ffd97d, #ffecb3);
+            box-shadow: 0 6px 20px rgba(255, 204, 51,0.5), 0 0 15px rgba(255, 179, 71, 0.4);
+            transform: translateY(-2px);
+        }
+        .btn-danger {
+            background: linear-gradient(90deg, #ff4b2b, #ff6b35);
+            border: none;
+            color: #fff;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(255, 75, 43, 0.4);
+            transition: all 0.3s ease;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+        .btn-danger:hover {
+            background: linear-gradient(90deg, #ff6b35, #ff4b2b);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.5), 0 0 15px rgba(255, 75, 43, 0.4);
+        }
+
+        /* No records message */
+        .text-muted {
+            color: rgba(255, 255, 255, 0.7) !important;
+            text-shadow: 0 0 3px rgba(0, 224, 255, 0.3);
+            font-style: italic;
+        }
+
+        /* Toast - Enhanced neon */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+        .toast {
+            background: rgba(0,0,0,0.9);
+            color: #fff;
+            border-left: 5px solid #00e0ff;
+            backdrop-filter: blur(15px);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,224,255,0.3);
+            border: 1px solid rgba(0, 224, 255, 0.2);
+        }
+        .toast-header {
+            background: rgba(0,224,255,0.3);
+            color: #fff;
+            border-radius: 10px 10px 0 0;
+            border-bottom: 1px solid rgba(0, 224, 255, 0.4);
+        }
+        .toast-body {
+            text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Container padding for better mobile */
+        .container {
+            padding: 20px;
+        }
+
+        /* Form container for better visual separation */
+        .form-container {
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 224, 255, 0.3);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0, 224, 255, 0.2);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        @media(max-width: 768px){
+            .form-container {
+                padding: 20px;
+                margin: 20px;
+                max-width: none;
+            }
+            .d-flex.justify-content-between {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .btn {
+                width: 100%;
+            }
+        }
+
+        @media(max-width: 576px){
+            h2 {
+                font-size: 1.5rem;
+            }
+            .form-control, .form-select, textarea {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Edit Assignment</h2>
+
+        <a href="/teacher/view_assignments" class="btn btn-dark mb-3"><i class="bi bi-arrow-left"></i> Back to Assignments</a>
+
+        <!-- Flash Toasts -->
+        <div class="toast-container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="toast align-items-center text-bg-{{ 'success' if category=='success' else 'warning' if category=='warning' else 'danger' }} border-0 mb-2" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="d-flex">
+                            <div class="toast-body">
+                                {{ message }}
+                            </div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <div class="form-container">
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="title" class="form-label"><i class="bi bi-file-earmark-text"></i> Title:</label>
+                    <input type="text" id="title" name="title" class="form-control" value="{{ assignment.title }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label"><i class="bi bi-card-text"></i> Description:</label>
+                    <textarea id="description" name="description" class="form-control" rows="4">{{ assignment.description }}</textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="due_date" class="form-label"><i class="bi bi-calendar-check"></i> Due Date:</label>
+                    <input type="date" id="due_date" name="due_date" class="form-control" value="{{ assignment.due_date.strftime('%Y-%m-%d') if assignment.due_date else '' }}">
+                </div>
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-check-circle"></i> Update Assignment</button>
+                    <a href="/teacher/view_assignments" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Auto-show toasts
+        const toastElList = [].slice.call(document.querySelectorAll('.toast'))
+        toastElList.forEach(function (toastEl) {
+            new bootstrap.Toast(toastEl, { delay: 4000 }).show();
+        });
+    </script>
+</body>
+</html>
