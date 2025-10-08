@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>My Assignments - Rajah's College</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+<style>
+    body {
+        background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #fff;
+        min-height: 100vh;
+    }
+
+    .container {
+        padding: 20px;
+        margin-top: 50px;
+        background: none;
+        border-radius: 15px;
+        box-shadow: none;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 40px;
+        color: #00e0ff;
+        text-shadow: 0 0 10px #00e0ff;
+        letter-spacing: 1px;
+        font-weight: 600;
+    }
+
+    a.btn {
+        text-decoration: none;
+    }
+
+    .btn-primary {
+        background: linear-gradient(90deg, #007bff, #00e0ff);
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+        transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+        background: linear-gradient(90deg, #00e0ff, #007bff);
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,224,255,0.5);
+    }
+    .btn-secondary {
+        background: rgba(108, 117, 125, 0.8);
+        border: 1px solid rgba(0, 224, 255, 0.3);
+        color: #fff;
+        transition: all 0.3s ease;
+    }
+    .btn-secondary:hover { 
+        background: rgba(90, 98, 104, 0.9);
+        color: #fff;
+        box-shadow: 0 4px 15px rgba(0,224,255,0.2);
+    }
+    .btn-success {
+        background: linear-gradient(90deg, #28a745, #00ffcc);
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        transition: all 0.3s ease;
+    }
+    .btn-success:hover {
+        background: linear-gradient(90deg, #00ffcc, #28a745);
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 255, 204, 0.5);
+    }
+
+    /* Table - Elegant neon style: subtle glow borders, alternates, high contrast for visibility */
+    .table {
+        backdrop-filter: blur(10px);
+        background: rgba(0,0,0,0.5);
+        border-radius: 10px;
+        color: #fff;
+        border: 1px solid rgba(0, 224, 255, 0.4);
+        box-shadow: 0 0 20px rgba(0, 224, 255, 0.1);
+        overflow: hidden;
+    }
+    .table th {
+        background: linear-gradient(90deg, rgba(0,224,255,0.3), rgba(0,119,255,0.3));
+        color: #fff;
+        text-shadow: 0 0 5px #00e0ff;
+        border-bottom: 2px solid rgba(0, 224, 255, 0.6);
+        font-weight: 600;
+        padding: 12px 8px;
+    }
+    .table td {
+        vertical-align: middle;
+        text-align: center;
+        border-bottom: 1px solid rgba(0, 224, 255, 0.2);
+        padding: 10px 8px;
+        text-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
+    }
+    .table tbody tr:nth-child(even) {
+        background: rgba(0, 224, 255, 0.05);
+    }
+    .table tbody tr:hover {
+        background: rgba(0, 224, 255, 0.1);
+        box-shadow: inset 0 0 10px rgba(0, 224, 255, 0.2);
+        transition: all 0.2s ease;
+    }
+
+    /* Status classes - Aligned with neon theme colors, reduced glow */
+    .status-submitted {
+        color: #00ffcc;
+        font-weight: 600;
+        text-shadow: 0 0 2px #00ffcc;
+    }
+    .status-pending {
+        color: #ffcc00;
+        font-weight: 600;
+        text-shadow: 0 0 2px #ffcc00;
+    }
+    .deadline-passed {
+        color: #ff0033;
+        font-weight: 600;
+        text-shadow: 0 0 2px #ff0033;
+    }
+
+    /* Form inputs - Neon styled */
+    .form-control {
+        background: rgba(0, 0, 0, 0.6);
+        border: 1px solid rgba(0, 224, 255, 0.4);
+        color: #fff;
+        backdrop-filter: blur(5px);
+        transition: all 0.3s ease;
+    }
+    .form-control:focus {
+        background: rgba(0, 0, 0, 0.7);
+        border-color: #00e0ff;
+        box-shadow: 0 0 10px rgba(0, 224, 255, 0.3);
+        color: #fff;
+    }
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    input[type="file"] {
+        background: rgba(0, 0, 0, 0.6);
+        border: 1px solid rgba(0, 224, 255, 0.4);
+        color: #fff;
+        backdrop-filter: blur(5px);
+    }
+    input[type="file"]::file-selector-button {
+        background: linear-gradient(90deg, #007bff, #00e0ff);
+        color: #fff;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    input[type="file"]::file-selector-button:hover {
+        background: linear-gradient(90deg, #00e0ff, #007bff);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 10px rgba(0, 224, 255, 0.3);
+    }
+
+    /* Toast - Aligned with neon theme */
+    .toast-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 2000;
+    }
+    .toast {
+        backdrop-filter: blur(10px);
+        background: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        border: 1px solid rgba(0, 224, 255, 0.4);
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 224, 255, 0.2);
+    }
+    .toast-header {
+        background: rgba(0, 224, 255, 0.2);
+        color: #00e0ff;
+        border-bottom: 1px solid rgba(0, 224, 255, 0.4);
+    }
+    .btn-close {
+        filter: invert(1);
+    }
+
+    @media(max-width: 768px){
+        .table-responsive {
+            font-size: 0.9rem;
+        }
+        .btn {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+        .form-control, input[type="file"] {
+            font-size: 0.9rem;
+        }
+    }
+
+    @media(max-width: 576px){
+        h2 {
+            font-size: 1.5rem;
+        }
+        .table th, .table td {
+            padding: 8px 4px;
+            font-size: 0.85rem;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>My Assignments</h2>
+
+  <div class="d-flex justify-content-end mb-3">
+    <a href="/student/dashboard" class="btn btn-primary"><i class="bi bi-arrow-left"></i> Back to Dashboard</a>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Subject</th>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Teacher</th>
+          <th>Due Date</th>
+          <th>Status / Submit</th>
+          <th>File</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for assign in assignments %}
+        <tr>
+          <td>{{ assign.subject_name }}</td>
+          <td>{{ assign.title }}</td>
+          <td>{{ assign.description }}</td>
+          <td>{{ assign.teacher_name }}</td>
+          <td>{{ assign.due_date.strftime('%Y-%m-%d') }}</td>
+          <td>
+            {% if assign.status == 'Submitted' %}
+                <span class="status-submitted">{{ assign.status }}</span>
+                {% if assign.due_date >= current_date %}
+                    <form action="{{ url_for('student_submit_assignment') }}" method="POST" enctype="multipart/form-data" class="mt-2">
+                        <input type="hidden" name="assignment_id" value="{{ assign.id }}">
+                        <input type="file" name="file" required class="form-control form-control-sm mb-1">
+                        <button type="submit" class="btn btn-sm btn-success w-100">Resubmit</button>
+                    </form>
+                {% else %}
+                    <span class="deadline-passed mt-1 d-block">Deadline Passed</span>
+                {% endif %}
+            {% else %}
+                {% if assign.due_date >= current_date %}
+                    <form action="{{ url_for('student_submit_assignment') }}" method="POST" enctype="multipart/form-data" class="mt-1">
+                        <input type="hidden" name="assignment_id" value="{{ assign.id }}">
+                        <input type="file" name="file" required class="form-control form-control-sm mb-1">
+                        <button type="submit" class="btn btn-sm btn-success w-100">Submit</button>
+                    </form>
+                {% else %}
+                    <span class="deadline-passed">Deadline Passed</span>
+                {% endif %}
+            {% endif %}
+          </td>
+          <td>
+            {% if assign.file_path %}
+                <a href="{{ url_for('static', filename=assign.file_path) }}" target="_blank" class="btn btn-sm btn-primary">Download</a>
+            {% else %}
+                -
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Toast Notification -->
+<div class="toast-container">
+    <div id="toastMessage" class="toast align-items-center text-bg-dark border-0" role="alert">
+        <div class="d-flex">
+            <div class="toast-body">Assignment updated successfully!</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Example toast trigger (show after successful submission)
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("toast") === "success") {
+        const toastEl = document.getElementById('toastMessage');
+        const toast = new bootstrap.Toast(toastEl);
+        toast.show();
+    }
+</script>
+
+</body>
+</html>

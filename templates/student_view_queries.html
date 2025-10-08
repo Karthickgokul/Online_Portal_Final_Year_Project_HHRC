@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>View Queries - Rajah's College</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+<style>
+    body {
+        background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #fff;
+        min-height: 100vh;
+    }
+
+    .container {
+        padding: 20px;
+        margin-top: 50px;
+        background: none;
+        border-radius: 15px;
+        box-shadow: none;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 40px;
+        color: #00e0ff;
+        text-shadow: 0 0 10px #00e0ff;
+        letter-spacing: 1px;
+        font-weight: 600;
+    }
+
+    a.btn {
+        text-decoration: none;
+    }
+
+    .btn-primary {
+        background: linear-gradient(90deg, #007bff, #00e0ff);
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+        transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+        background: linear-gradient(90deg, #00e0ff, #007bff);
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,224,255,0.5);
+    }
+    .btn-secondary {
+        background: rgba(108, 117, 125, 0.8);
+        border: 1px solid rgba(0, 224, 255, 0.3);
+        color: #fff;
+        transition: all 0.3s ease;
+    }
+    .btn-secondary:hover { 
+        background: rgba(90, 98, 104, 0.9);
+        color: #fff;
+        box-shadow: 0 4px 15px rgba(0,224,255,0.2);
+    }
+
+    /* Table - Elegant neon style: subtle glow borders, alternates, high contrast for visibility */
+    .table {
+        backdrop-filter: blur(10px);
+        background: rgba(0,0,0,0.5);
+        border-radius: 10px;
+        color: #fff;
+        border: 1px solid rgba(0, 224, 255, 0.4);
+        box-shadow: 0 0 20px rgba(0, 224, 255, 0.1);
+        overflow: hidden;
+    }
+    .table th {
+        background: linear-gradient(90deg, rgba(0,224,255,0.3), rgba(0,119,255,0.3));
+        color: #fff;
+        text-shadow: 0 0 5px #00e0ff;
+        border-bottom: 2px solid rgba(0, 224, 255, 0.6);
+        font-weight: 600;
+        padding: 12px 8px;
+    }
+    .table td {
+        vertical-align: middle;
+        text-align: center;
+        border-bottom: 1px solid rgba(0, 224, 255, 0.2);
+        padding: 10px 8px;
+        text-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
+    }
+    .table tbody tr:nth-child(even) {
+        background: rgba(0, 224, 255, 0.05);
+    }
+    .table tbody tr:hover {
+        background: rgba(0, 224, 255, 0.1);
+        box-shadow: inset 0 0 10px rgba(0, 224, 255, 0.2);
+        transition: all 0.2s ease;
+    }
+
+    /* Status classes - Aligned with neon theme colors, reduced glow */
+    .status-pending {
+        color: #ffcc00;
+        font-weight: 600;
+        text-shadow: 0 0 2px #ffcc00;
+    }
+    .status-replied {
+        color: #00ffcc;
+        font-weight: 600;
+        text-shadow: 0 0 2px #00ffcc;
+    }
+
+    /* No queries message - Styled to match neon theme */
+    .no-queries {
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(0, 224, 255, 0.4);
+        border-radius: 10px;
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 0 20px rgba(0, 224, 255, 0.1);
+        font-size: 1.1rem;
+        text-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
+    }
+
+    @media(max-width: 768px){
+        .table-responsive {
+            font-size: 0.9rem;
+        }
+        .btn {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+    }
+
+    @media(max-width: 576px){
+        h2 {
+            font-size: 1.5rem;
+        }
+        .table th, .table td {
+            padding: 8px 4px;
+            font-size: 0.85rem;
+        }
+        .no-queries {
+            font-size: 1rem;
+            padding: 15px;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Your Queries</h2>
+
+  <div class="d-flex justify-content-end mb-3">
+    <a href="/student/query_management" class="btn btn-primary"><i class="bi bi-arrow-left"></i> Back to Query Management</a>
+  </div>
+
+  {% if queries %}
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Subject</th>
+          <th>Query</th>
+          <th>Reply</th>
+          <th>Submitted At</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for q in queries %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ q.subject_name }}</td>
+          <td>{{ q.query_text }}</td>
+          <td>{{ q.reply if q.reply else '-' }}</td>
+          <td>{{ q.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+          <td class="{% if q.reply %}status-replied{% else %}status-pending{% endif %}">
+              {% if q.reply %}Replied{% else %}Pending{% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="no-queries">
+    <i class="bi bi-chat-square-text" style="font-size: 2rem; color: #00e0ff; margin-bottom: 10px; display: block;"></i>
+    No queries submitted yet.
+  </div>
+  {% endif %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

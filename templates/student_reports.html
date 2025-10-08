@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Reports & Analytics - Student</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+    color: #fff;
+    min-height: 100vh;
+    position: relative;
+}
+
+.container {
+    margin-top: 60px;
+    max-width: 1200px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 50px;
+    color: #00e0ff;
+    text-shadow: 0 0 15px rgba(0, 224, 255, 0.5);
+    font-weight: 300;
+    letter-spacing: 1px;
+}
+
+/* Cards with refined neon elegance */
+.card {
+    border-radius: 20px;
+    padding: 25px;
+    margin-bottom: 35px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(0, 224, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(0, 224, 255, 0.1);
+    transition: all 0.4s ease;
+    backdrop-filter: blur(10px);
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 224, 255, 0.4);
+    border-color: rgba(0, 224, 255, 0.6);
+}
+
+.card-header {
+    font-weight: 500;
+    text-shadow: 0 0 8px rgba(0, 224, 255, 0.3);
+    background: linear-gradient(135deg, rgba(0, 224, 255, 0.2) 0%, rgba(0, 118, 255, 0.1) 100%);
+    border-bottom: 1px solid rgba(0, 224, 255, 0.2);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+/* Back Button with elegant gradient */
+.btn-back, .btn-secondary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: #fff;
+    font-weight: 500;
+    padding: 12px 30px;
+    border-radius: 50px;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.btn-back:hover, .btn-secondary:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Chart Canvas with subtle glow */
+canvas {
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 15px;
+    box-shadow: inset 0 0 20px rgba(0, 224, 255, 0.05);
+    border: 1px solid rgba(0, 224, 255, 0.1);
+}
+
+/* Enhanced chart options for elegance */
+.chart-container {
+    position: relative;
+    height: 300px;
+    margin-top: 10px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container { margin-top: 40px; padding: 0 15px; }
+    .card { padding: 20px; margin-bottom: 25px; }
+    h2 { margin-bottom: 30px; font-size: 1.8rem; }
+    .btn-back { width: 100%; justify-content: center; }
+    .chart-container { height: 250px; }
+}
+
+@media (max-width: 576px) {
+    .card { padding: 15px; }
+    canvas { max-height: 200px; }
+}
+
+/* Subtle animation for loading */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.card:nth-child(1) { animation-delay: 0.1s; }
+.card:nth-child(2) { animation-delay: 0.2s; }
+.card:nth-child(3) { animation-delay: 0.3s; }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>My Reports & Analytics</h2>
+    <a href="/student/dashboard" class="btn btn-back">← Back to Dashboard</a>
+
+    <div class="row g-4">
+        <!-- Attendance % -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Attendance Overview (%)</div>
+                <div class="chart-container">
+                    <canvas id="attendanceChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Assignment Submissions -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Assignments Submitted</div>
+                <div class="chart-container">
+                    <canvas id="assignmentChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overall Attendance Pie -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Overall Attendance</div>
+                <div class="chart-container">
+                    <canvas id="overallAttendancePie"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+var attendanceData = {{ attendance_data | tojson | safe }};
+var assignmentData = {{ assignment_data | tojson | safe }};
+var overallAttendance = {{ overall_attendance | tojson | safe }};
+
+// Ensure data is properly structured to avoid errors
+if (!attendanceData || !attendanceData.labels || !attendanceData.values) {
+    attendanceData = { labels: ['No Data'], values: [0] };
+}
+if (!assignmentData || !assignmentData.labels || !assignmentData.values) {
+    assignmentData = { labels: ['No Data'], values: [0] };
+}
+if (!overallAttendance || Object.keys(overallAttendance).length === 0) {
+    overallAttendance = { 'No Data': 100 };
+}
+
+// Attendance % Chart (Bar)
+const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
+new Chart(attendanceCtx, {
+    type: 'bar',
+    data: {
+        labels: attendanceData.labels,
+        datasets: [{
+            label: 'Attendance %',
+            data: attendanceData.values,
+            backgroundColor: 'rgba(0, 224, 255, 0.7)',
+            borderColor: 'rgba(0, 224, 255, 1)',
+            borderWidth: 2,
+            borderRadius: 8,
+            borderSkipped: false,
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { 
+            legend: { display: false },
+            tooltip: { backgroundColor: 'rgba(0, 0, 0, 0.8)', titleColor: '#00e0ff', bodyColor: '#fff' }
+        },
+        scales: {
+            y: { 
+                beginAtZero: true, 
+                max: 100, 
+                title: { display: true, text: 'Attendance %', color: '#00e0ff', font: { size: 14 } },
+                ticks: { color: '#ccc', stepSize: 20 },
+                grid: { color: 'rgba(0, 224, 255, 0.1)' }
+            },
+            x: { 
+                title: { display: true, text: 'Subjects', color: '#00e0ff', font: { size: 14 } },
+                ticks: { color: '#ccc' },
+                grid: { color: 'rgba(0, 224, 255, 0.1)' }
+            }
+        },
+        animation: { duration: 1000, easing: 'easeInOutQuart' }
+    }
+});
+
+// Assignment Submissions Chart (Bar)
+const assignmentCtx = document.getElementById('assignmentChart').getContext('2d');
+new Chart(assignmentCtx, {
+    type: 'bar',
+    data: {
+        labels: assignmentData.labels,
+        datasets: [{
+            label: 'Assignments Submitted',
+            data: assignmentData.values,
+            backgroundColor: 'rgba(255, 99, 132, 0.7)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 2,
+            borderRadius: 8,
+            borderSkipped: false,
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { 
+            legend: { display: false },
+            tooltip: { backgroundColor: 'rgba(0, 0, 0, 0.8)', titleColor: '#ff6384', bodyColor: '#fff' }
+        },
+        scales: {
+            y: { 
+                beginAtZero: true, 
+                title: { display: true, text: 'Submissions Count', color: '#00e0ff', font: { size: 14 } },
+                ticks: { color: '#ccc' },
+                grid: { color: 'rgba(0, 224, 255, 0.1)' }
+            },
+            x: { 
+                title: { display: true, text: 'Subjects', color: '#00e0ff', font: { size: 14 } },
+                ticks: { color: '#ccc' },
+                grid: { color: 'rgba(0, 224, 255, 0.1)' }
+            }
+        },
+        animation: { duration: 1000, easing: 'easeInOutQuart' }
+    }
+});
+
+// Overall Attendance Pie
+const pieCtx = document.getElementById('overallAttendancePie').getContext('2d');
+new Chart(pieCtx, {
+    type: 'pie',
+    data: {
+        labels: Object.keys(overallAttendance),
+        datasets: [{
+            data: Object.values(overallAttendance),
+            backgroundColor: [
+                'rgba(75, 192, 192, 0.8)', 
+                'rgba(255, 99, 132, 0.8)',
+                'rgba(255, 205, 86, 0.8)',
+                'rgba(153, 102, 255, 0.8)'
+            ],
+            borderWidth: 2,
+            borderColor: '#fff'
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { 
+            legend: { 
+                position: 'bottom', 
+                labels: { 
+                    color: '#00e0ff', 
+                    font: { size: 12 },
+                    padding: 20,
+                    usePointStyle: true
+                } 
+            },
+            tooltip: { backgroundColor: 'rgba(0, 0, 0, 0.8)', titleColor: '#00e0ff', bodyColor: '#fff' }
+        },
+        animation: { 
+            animateRotate: true, 
+            animateScale: true,
+            duration: 1500,
+            easing: 'easeInOutQuart'
+        }
+    }
+});
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

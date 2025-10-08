@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Raise Query - Rajah's College</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+<style>
+    body {
+        background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #fff;
+        min-height: 100vh;
+    }
+
+    .container {
+        padding: 20px;
+        margin-top: 50px;
+        background: none;
+        border-radius: 15px;
+        box-shadow: none;
+        max-width: 700px;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 40px;
+        color: #00e0ff;
+        text-shadow: 0 0 10px #00e0ff;
+        letter-spacing: 1px;
+        font-weight: 600;
+    }
+
+    a.btn {
+        text-decoration: none;
+    }
+
+    .btn-primary {
+        background: linear-gradient(90deg, #007bff, #00e0ff);
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+        transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+        background: linear-gradient(90deg, #00e0ff, #007bff);
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,224,255,0.5);
+    }
+    .btn-secondary {
+        background: rgba(108, 117, 125, 0.8);
+        border: 1px solid rgba(0, 224, 255, 0.3);
+        color: #fff;
+        transition: all 0.3s ease;
+    }
+    .btn-secondary:hover { 
+        background: rgba(90, 98, 104, 0.9);
+        color: #fff;
+        box-shadow: 0 4px 15px rgba(0,224,255,0.2);
+    }
+    .btn-success {
+        background: linear-gradient(90deg, #28a745, #00ffcc);
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        transition: all 0.3s ease;
+    }
+    .btn-success:hover {
+        background: linear-gradient(90deg, #00ffcc, #28a745);
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 255, 204, 0.5);
+    }
+    .btn-danger {
+        background: linear-gradient(90deg, #dc3545, #ff0033);
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+        transition: all 0.3s ease;
+    }
+    .btn-danger:hover {
+        background: linear-gradient(90deg, #ff0033, #dc3545);
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 0, 51, 0.5);
+    }
+
+    /* Form styling - Neon themed */
+    .form-label {
+        color: #fff;
+        font-weight: 600;
+        text-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
+        margin-bottom: 8px;
+    }
+    .form-control, .form-select {
+        background: rgba(0, 0, 0, 0.6);
+        border: 1px solid rgba(0, 224, 255, 0.4);
+        color: #fff;
+        backdrop-filter: blur(5px);
+        transition: all 0.3s ease;
+        border-radius: 8px;
+    }
+    .form-control:focus, .form-select:focus {
+        background: rgba(0, 0, 0, 0.7);
+        border-color: #00e0ff;
+        box-shadow: 0 0 10px rgba(0, 224, 255, 0.3);
+        color: #fff;
+        outline: none;
+    }
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+    }
+    .form-select option {
+        background: rgba(0, 0, 0, 0.8);
+        color: #fff;
+    }
+
+    /* Header buttons */
+    .header-buttons {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    /* Form container */
+    .form-container {
+        backdrop-filter: blur(10px);
+        background: rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(0, 224, 255, 0.4);
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 0 20px rgba(0, 224, 255, 0.1);
+    }
+
+    @media(max-width: 768px){
+        .header-buttons {
+            flex-direction: column;
+            gap: 10px;
+        }
+        .btn {
+            width: 100%;
+        }
+        .form-container {
+            padding: 20px;
+        }
+    }
+
+    @media(max-width: 576px){
+        h2 {
+            font-size: 1.5rem;
+        }
+        .form-label {
+            font-size: 0.95rem;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header-buttons">
+    <a href="/student/query_management" class="btn btn-primary"><i class="bi bi-arrow-left"></i> Back to Query Management</a>
+    <a href="/logout" class="btn btn-danger"><i class="bi bi-box-arrow-right"></i> Logout</a>
+  </div>
+
+  <h2>Raise New Query</h2>
+
+  <div class="form-container">
+    <form action="/student/raise_query" method="POST">
+      <div class="mb-3">
+        <label for="subject_id" class="form-label">Select Subject</label>
+        <select class="form-select" id="subject_id" name="subject_id" required>
+          <option value="">-- Select Subject --</option>
+          {% for sub in subjects %}
+          <option value="{{ sub.id }}">{{ sub.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="query_text" class="form-label">Your Query</label>
+        <textarea class="form-control" id="query_text" name="query_text" rows="5" placeholder="Enter your query here..." required></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-success w-100">Submit Query</button>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Attendance - Rajah's College</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+<style>
+    body {
+        background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #fff;
+        min-height: 100vh;
+    }
+
+    .container {
+        padding: 20px;
+        margin-top: 50px;
+        background: none;
+        border-radius: 15px;
+        box-shadow: none;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 40px;
+        color: #00e0ff;
+        text-shadow: 0 0 10px #00e0ff;
+        letter-spacing: 1px;
+        font-weight: 600;
+    }
+
+    a.btn {
+        text-decoration: none;
+    }
+
+    .btn-primary {
+        background: linear-gradient(90deg, #007bff, #00e0ff);
+        border: none;
+        color: #fff;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+        transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+        background: linear-gradient(90deg, #00e0ff, #007bff);
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,224,255,0.5);
+    }
+    .btn-secondary {
+        background: rgba(108, 117, 125, 0.8);
+        border: 1px solid rgba(0, 224, 255, 0.3);
+        color: #fff;
+        transition: all 0.3s ease;
+    }
+    .btn-secondary:hover { 
+        background: rgba(90, 98, 104, 0.9);
+        color: #fff;
+        box-shadow: 0 4px 15px rgba(0,224,255,0.2);
+    }
+
+    /* Table - Elegant neon style: subtle glow borders, alternates, high contrast for visibility */
+    .table {
+        backdrop-filter: blur(10px);
+        background: rgba(0,0,0,0.5);
+        border-radius: 10px;
+        color: #fff;
+        border: 1px solid rgba(0, 224, 255, 0.4);
+        box-shadow: 0 0 20px rgba(0, 224, 255, 0.1);
+        overflow: hidden;
+    }
+    .table th {
+        background: linear-gradient(90deg, rgba(0,224,255,0.3), rgba(0,119,255,0.3));
+        color: #fff;
+        text-shadow: 0 0 5px #00e0ff;
+        border-bottom: 2px solid rgba(0, 224, 255, 0.6);
+        font-weight: 600;
+        padding: 12px 8px;
+    }
+    .table td {
+        vertical-align: middle;
+        text-align: center;
+        border-bottom: 1px solid rgba(0, 224, 255, 0.2);
+        padding: 10px 8px;
+        text-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
+    }
+    .table tbody tr:nth-child(even) {
+        background: rgba(0, 224, 255, 0.05);
+    }
+    .table tbody tr:hover {
+        background: rgba(0, 224, 255, 0.1);
+        box-shadow: inset 0 0 10px rgba(0, 224, 255, 0.2);
+        transition: all 0.2s ease;
+    }
+
+    /* Progress Circle - Refined elegant neon: no visible border, smooth conic overlay on dark base, subtle glow */
+    .progress-circle {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 600;
+        color: #fff;
+        position: relative;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        /* Initial box-shadow using CSS variables */
+        box-shadow: 
+            0 0 8px var(--glow-color, rgba(0, 224, 255, 0.2)), 
+            inset 0 0 12px rgba(0, 0, 0, 0.6);
+        text-shadow: 0 0 4px rgba(0, 0, 0, 0.9);
+        backdrop-filter: blur(10px);
+        border: none; /* Removed border for cleaner look */
+        background: rgba(0, 0, 0, 0.8); /* Dark base for conic overlay */
+        /* Breathing animation */
+        animation: breathe 4s ease-in-out infinite;
+    }
+
+    /* CSS Variables for glow colors (defaults to cyan theme) */
+    .progress-circle {
+        --glow-color: rgba(0, 224, 255, 0.2);
+        --glow-bright: rgba(0, 224, 255, 0.4);
+    }
+
+    /* Specific glow colors based on progress level */
+    .progress-high {
+        --glow-color: rgba(0, 255, 204, 0.2);
+        --glow-bright: rgba(0, 255, 204, 0.4);
+    }
+
+    .progress-medium {
+        --glow-color: rgba(255, 204, 0, 0.2);
+        --glow-bright: rgba(255, 204, 0, 0.4);
+    }
+
+    .progress-low {
+        --glow-color: rgba(255, 0, 51, 0.2);
+        --glow-bright: rgba(255, 0, 51, 0.4);
+    }
+
+    /* Breathing keyframes: slow pulse with scale and glow intensity */
+    @keyframes breathe {
+        0%, 100% {
+            transform: scale(1);
+            box-shadow: 
+                0 0 8px var(--glow-color), 
+                inset 0 0 12px rgba(0, 0, 0, 1);
+        }
+        50% {
+            transform: scale(1.05);
+            box-shadow: 
+                0 0 12px var(--glow-bright), 
+                inset 0 0 12px rgba(0, 0, 0, 1);
+        }
+    }
+
+    .progress-circle::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: -1;
+        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .progress-circle:hover {
+        transform: scale(1.08);
+        box-shadow: 
+            0 0 15px var(--glow-bright), 
+            inset 0 0 15px rgba(0, 0, 0, 0.7);
+        animation-play-state: paused; /* Pause breathing on hover for better interaction */
+    }
+
+    /* Modal - Elegant neon style */
+    .modal-content {
+        background: rgba(0,0,0,0.8);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(0, 224, 255, 0.3);
+        color: #fff;
+        box-shadow: 0 0 30px rgba(0, 224, 255, 0.2);
+        border-radius: 15px;
+    }
+    .modal-header {
+        background: rgba(0,224,255,0.2);
+        border-bottom: 1px solid rgba(0, 224, 255, 0.4);
+        color: #fff;
+    }
+    .modal-title {
+        color: #00e0ff;
+        text-shadow: 0 0 5px #00e0ff;
+    }
+    .modal-body {
+        color: #fff;
+        text-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
+    }
+    .modal-body strong {
+        color: #00e0ff;
+        text-shadow: 0 0 5px #00e0ff;
+    }
+    .modal-footer {
+        border-top: 1px solid rgba(0, 224, 255, 0.4);
+        background: rgba(0, 0, 0, 0.6);
+    }
+    .btn-close {
+        filter: invert(1);
+    }
+
+    @media(max-width: 768px){
+        .table-responsive {
+            font-size: 0.9rem;
+        }
+        .progress-circle {
+            width: 70px;
+            height: 70px;
+            font-size: 13px;
+        }
+        .btn {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+    }
+
+    @media(max-width: 576px){
+        h2 {
+            font-size: 1.5rem;
+        }
+        .table th, .table td {
+            padding: 8px 4px;
+            font-size: 0.85rem;
+        }
+        .progress-circle {
+            width: 60px;
+            height: 60px;
+            font-size: 12px;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Your Attendance Summary</h2>
+
+  <div class="d-flex justify-content-end mb-3">
+    <a href="/student/dashboard" class="btn btn-primary"><i class="bi bi-arrow-left"></i> Back to Dashboard</a>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Subject</th>
+          <th>Teacher</th>
+          <th>Attended / Total</th>
+          <th>%</th>
+          <th>Visual</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for att in attendance_summary %}
+        <tr>
+          <td>{{ att.subject_name }}</td>
+          <td>{{ att.teacher_name }}</td>
+          <td>{{ att.attended }} / {{ att.total }}</td>
+          <td>{{ att.percent }}%</td>
+          <td>
+            <div class="progress-circle {% if att.percent >= 75 %}progress-high{% elif att.percent >= 50 %}progress-medium{% else %}progress-low{% endif %}"
+                 onclick="showAttendanceDetails({{ loop.index0 }})"
+                 style="background: conic-gradient(
+                   {% if att.percent >= 75 %} #00ffcc 0deg, #00ffcc {{ att.percent * 3.6 }}deg, 
+                   {% elif att.percent >= 50 %} #ffcc00 0deg, #ffcc00 {{ att.percent * 3.6 }}deg, 
+                   {% else %} #ff0033 0deg, #ff0033 {{ att.percent * 3.6 }}deg, 
+                   {% endif %}
+                   rgba(0, 0, 0, 0.8) {{ att.percent * 3.6 }}deg 360deg
+                 )">
+              {{ att.percent }}%
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="attendanceModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle">Attendance Details</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Attended Dates:</strong> <span id="attendedDates"></span></p>
+        <p><strong>Absent Dates:</strong> <span id="absentDates"></span></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function showAttendanceDetails(index) {
+  const data = {{ attendance_summary|tojson }};
+  const att = data[index];
+
+  document.getElementById('modalTitle').innerText = att.subject_name + " Attendance";
+  document.getElementById('attendedDates').innerText = att.attended_dates.length ? att.attended_dates.join(", ") : "No classes yet";
+  document.getElementById('absentDates').innerText = att.absent_dates.length ? att.absent_dates.join(", ") : "No absences";
+
+  const modal = new bootstrap.Modal(document.getElementById('attendanceModal'));
+  modal.show();
+}
+</script>
+
+</body>
+</html>
