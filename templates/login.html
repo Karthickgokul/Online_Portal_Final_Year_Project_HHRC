@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rajah's College Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(139, 0, 0, 0.1), rgba(178, 34, 34, 0.1)), 
+                        url("../static/images/raja.jpg") no-repeat center center fixed;
+            background-size: cover;
+            position: relative;
+            animation: subtleBgShift 20s ease-in-out infinite alternate;
+        }
+        @keyframes subtleBgShift {
+            0% { background-position: center center; }
+            100% { background-position: center 10% center; } /* Subtle parallax-like shift */
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(139, 0, 0, 0.2));
+            z-index: 1;
+            animation: overlayPulse 8s ease-in-out infinite alternate;
+        }
+        @keyframes overlayPulse {
+            0% { opacity: 0.4; }
+            100% { opacity: 0.6; }
+        }
+        .login-card {
+            position: relative;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px); /* Glassmorphism effect */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 420px;
+            max-width: 90%;
+            padding: 50px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            animation: slideInUp 1s ease-out forwards;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        @keyframes slideInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .login-card h2 {
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #8B0000;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            animation: fadeInDown 1.2s ease-out 0.2s both;
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .welcome-tagline {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+            animation: fadeInUp 1.2s ease-out 0.4s both;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8B0000;
+            z-index: 3;
+            transition: color 0.3s ease;
+        }
+        .form-control {
+            height: 50px;
+            font-size: 16px;
+            padding-left: 50px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+        }
+        .form-control:focus {
+            border-color: #8B0000;
+            box-shadow: 0 0 15px rgba(139, 0, 0, 0.2);
+            transform: scale(1.02);
+            background: rgba(255, 255, 255, 1);
+        }
+        .input-group:focus-within i {
+            color: #B22222;
+        }
+        .role-options {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 25px;
+            animation: fadeInUp 1.2s ease-out 0.6s both;
+        }
+        .role-btn {
+            flex: 1;
+            margin: 0 5px;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+        }
+        .role-btn:hover, .role-btn.selected {
+            border-color: #8B0000;
+            background: rgba(139, 0, 0, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 0, 0, 0.2);
+        }
+        .role-btn i {
+            display: block;
+            font-size: 24px;
+            margin-bottom: 5px;
+            color: #8B0000;
+        }
+        .btn-primary {
+            height: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #8B0000, #B22222);
+            border: none;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            animation: fadeInUp 1.2s ease-out 0.8s both;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #B22222, #DC143C);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 25px rgba(139, 0, 0, 0.3);
+        }
+        .btn-primary:active {
+            transform: translateY(-1px) scale(1.01);
+        }
+        /* Floating particles for engagement */
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: float 6s ease-in-out infinite;
+        }
+        .particle:nth-child(1) { width: 10px; height: 10px; top: 20%; left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { width: 6px; height: 6px; top: 60%; right: 15%; animation-delay: 2s; }
+        .particle:nth-child(3) { width: 8px; height: 8px; bottom: 30%; left: 20%; animation-delay: 4s; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        /* Responsive adjustments */
+        @media (max-width: 500px) {
+            .login-card { padding: 40px 25px; }
+            .role-options { flex-direction: column; }
+            .role-btn { margin-bottom: 10px; }
+        }
+        /* Alert animations */
+        .alert {
+            animation: slideInRight 0.5s ease-out;
+            border-radius: 10px;
+            border: none;
+        }
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="overlay">
+        <!-- Floating particles for subtle engagement -->
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <div class="login-card">
+        <h2>Rajah's College Portal</h2>
+        <p class="welcome-tagline">Welcome back! Securely access your academic world.</p>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="/login" id="loginForm">
+            <div class="input-group">
+                <i class="bi bi-person"></i>
+                <input type="text" name="username" class="form-control" placeholder="Username" required>
+            </div>
+            <div class="input-group">
+                <i class="bi bi-lock"></i>
+                <input type="password" name="password" class="form-control" placeholder="Password" required>
+            </div>
+            
+            <!-- Creative Role Selection with Icons -->
+            <div class="role-options">
+                <label class="role-btn" onclick="selectRole('student')">
+                    <i class="bi bi-mortarboard"></i>
+                    <span>Student</span>
+                </label>
+                <label class="role-btn" onclick="selectRole('teacher')">
+                    <i class="bi bi-easel"></i>
+                    <span>Teacher</span>
+                </label>
+                <label class="role-btn" onclick="selectRole('admin')">
+                    <i class="bi bi-gear"></i>
+                    <span>Admin</span>
+                </label>
+            </div>
+            <input type="hidden" name="role" id="roleInput" value="">
+            
+            <button type="submit" class="btn btn-primary w-100">Login to Your Portal</button>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Role selection functionality
+        function selectRole(role) {
+            document.querySelectorAll('.role-btn').forEach(btn => btn.classList.remove('selected'));
+            event.target.closest('.role-btn').classList.add('selected');
+            document.getElementById('roleInput').value = role;
+        }
+
+        // Form submission animation (optional loading state)
+        document.getElementById('loginForm').addEventListener('submit', function() {
+            const btn = this.querySelector('.btn-primary');
+            btn.innerHTML = '<i class="bi bi-hourglass-split spinner-border-sm me-2"></i>Logging in...';
+            btn.disabled = true;
+        });
+
+        // Ensure role is selected on load if needed (for demo)
+        if (!document.getElementById('roleInput').value) {
+            // Default or prompt, but keep as is
+        }
+    </script>
+</body>
+</html>
