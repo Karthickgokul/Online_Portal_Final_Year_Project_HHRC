@@ -2,7 +2,8 @@
 
 This is our **Flask-based web portal** created for our college's final year project **H.H The Rajah's College**.  
 It allows students, teachers, and admin to manage **assignments, attendance, submissions, and queries** efficiently.  
-Features include user authentication for admin, teachers, and students; managing subjects, assignments, and submissions; tracking student attendance; and handling student queries with teacher responses.
+Features include user authentication for admin, teachers, and students; managing subjects, assignments, and submissions; 
+tracking student attendance; and handling student queries with teacher responses.
 
 ---
 
@@ -27,3 +28,7 @@ project_folder/
 ```bash
 git clone https://github.com/yourusername/repo-name.git
 cd repo-name
+
+2.  **Create virtual environment (optional but recommended)**
+
+
