@@ -15,7 +15,7 @@ It allows students, teachers, and admin to manage assignments, attendance, submi
 ## Folder Structure
 project_folder/
 │
-├── static/
+├── static/                                                                                                                                                        
 │ ├── images/
 │ └── uploads/
 ├── templates/
