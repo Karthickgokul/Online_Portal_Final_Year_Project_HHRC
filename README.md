@@ -19,10 +19,7 @@ project_folder/
 ├── README.md
 └── requirements.txt
 
-yaml
-Copy code
 
----
 
 ## Setup
 
@@ -33,38 +30,35 @@ cd Online_Portal_Final_Year_Project_HHRC
 
 2. Create virtual environment (optional but recommended)
 
-bash
-Copy code
+
 python -m venv venv
 venv\Scripts\activate      # Windows
 # source venv/bin/activate  # Linux/Mac
 
 3. Install dependencies
 
-bash
-Copy code
 pip install -r requirements.txt
+
 4. Import database
+
 Open phpMyAdmin → Import database.sql → Go
 This creates the database, tables, and initial data.
 
 5. Run the application
-
-bash
-Copy code
 python app.py
 Open your browser: http://localhost:5000
 
+
 ## Technologies Used
 
-Python, Flask
+● Python, Flask
 
-MySQL / MariaDB
+● MySQL ,XAMPP
 
-HTML, CSS, JavaScript
+● HTML, CSS, JavaScript, Bootstrap
 
 
-Author
+Ⓐ Author
 
 Karthick Kumar S, BCA
 College: H.H The Rajah's College
